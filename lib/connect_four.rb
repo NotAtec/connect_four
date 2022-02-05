@@ -2,12 +2,12 @@
 require 'pry-byebug'
 
 class Game
-  def initialize(one = create_player, two = create_player)
+  def initialize(one = create_player, two = create_player, board = Board.new)
     @player_one = one
     @player_two = two
     @turn = 0
     @gamestate = 'not_started'
-    @gameboard = Board.new
+    @gameboard = board
   end
 
   def self.create_player
@@ -20,7 +20,7 @@ class Game
 
   def self.token_check(input)
     return input.upcase if input.match(/[A-Za-z]{1}/) && input.length == 1
-    
+
     if input.length > 1
       puts 'Please input only 1 character'
     else
@@ -28,6 +28,16 @@ class Game
     end
     nil
   end
+
+  def play_game()
+    loop do
+      break if @gameboard.game_won?(@player_one.token, @player_two.token)
+      
+    end
+    win_message(@player_one, @turn)
+  end
+
+  def win_message(winner, turns); end
 end
 
 class Player

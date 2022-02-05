@@ -71,7 +71,7 @@ describe Game do
   describe '#play_game' do
     let(:player_one) { instance_double(Player, name: 'one', token: 'x') }
     let(:player_two) { instance_double(Player, name: 'two', token: 'y') }
-    subject(:game_played) { described_class.new(player_one, player_two) }
+    subject(:game_played) { described_class.new(player_one, player_two, board) }
     let(:board) { instance_double(Board) }
 
     context 'when win check returns true' do
@@ -92,7 +92,7 @@ describe Game do
 
       it 'gives #win_message the correct details' do
         expect(game_played).to receive(:win_message).with(player_one, 3)
-        game_played.play_game
+        game_played.play_game 
       end
     end
   end
