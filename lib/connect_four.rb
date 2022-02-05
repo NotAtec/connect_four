@@ -19,18 +19,20 @@ class Game
   end
 
   def self.token_check(input)
-    if input.match(/[A-Za-z]{1}/) && input.length == 1
-      return input.upcase
-    elsif input.length > 1
+    return input.upcase if input.match(/[A-Za-z]{1}/) && input.length == 1
+    
+    if input.length > 1
       puts 'Please input only 1 character'
     else
       puts 'Please input a letter (A-Z)'
     end
-    return nil
+    nil
   end
 end
 
 class Player
+  attr_reader :name, :token
+
   def initialize(name, token)
     @name = name
     @token = token
@@ -40,6 +42,9 @@ end
 class Board
   def initialize
     @board = Array.new(7, Array.new(6))
+  end
+
+  def game_won?(token_one, token_two)
   end
 end
 # game = Game.new

@@ -67,4 +67,37 @@ describe Game do
       end
     end
   end
+
+  describe '#play_game' do
+    let(:player_one) { instance_double(Player, name: 'one', token: 'x') }
+    let(:player_two) { instance_double(Player, name: 'two', token: 'y') }
+    subject(:game_played) { described_class.new(player_one, player_two) }
+    let(:board) { instance_double(Board) }
+
+    context 'when win check returns true' do
+      before do
+        allow(board).to receive(:game_won?).and_return(true)
+        game_played.instance_variable_set(:@turn, 3)
+      end
+
+      it 'breaks the loop' do
+        expect(board).to receive(:game_won?).once
+        game_played.play_game
+      end
+
+      it 'triggers #win_message' do
+        expect(game_played).to receive(:win_message).once
+        game_played.play_game
+      end
+
+      it 'gives #win_message the correct details' do
+        expect(game_played).to receive(:win_message).with(player_one, 3)
+        game_played.play_game
+      end
+    end
+  end
 end
+
+describe Board do
+end
+
