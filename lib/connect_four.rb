@@ -7,6 +7,7 @@ class Game
     @player_two = two
     @turn = 0
     @gamestate = 'not_started'
+    @gameboard = Board.new
   end
 
   def self.create_player
@@ -35,3 +36,10 @@ class Player
     @token = token
   end
 end
+
+class Board
+  def initialize
+    @board = Array.new(7, Array.new(6))
+  end
+end
+# game = Game.new
