@@ -1,6 +1,8 @@
 # frozen_string_literal: true
+
 require 'pry-byebug'
 
+# Class containing all savable logic & methods for playing
 class Game
   def initialize(one = create_player, two = create_player, board = Board.new)
     @player_one = one
@@ -11,7 +13,7 @@ class Game
   end
 
   def self.create_player
-    puts "Welcome! What is your name?"
+    puts 'Welcome! What is your name?'
     name = gets.chomp
     puts "Welcome #{name}, what will be your token?"
     token = token_check(gets.chomp)
@@ -29,10 +31,9 @@ class Game
     nil
   end
 
-  def play_game()
+  def play_game
     loop do
       break if @gameboard.game_end?(@player_one.token, @player_two.token)
-      
     end
     win_message(@gamestate, @turn)
   end
@@ -48,6 +49,7 @@ class Game
   end
 end
 
+# Contains info for each player
 class Player
   attr_reader :name, :token
 
@@ -57,18 +59,18 @@ class Player
   end
 end
 
+# Contains info for the playable board and methods regarding it
 class Board
   def initialize
     @board = Array.new(7) { Array.new(6) }
   end
 
-  def game_end?(token_one, token_two)
-  end
+  def game_end?(token_one, token_two); end
 
   def place_token(token, col)
     return 'col_full' unless @board[col][5].nil?
 
-    idx = @board[col].find_index { |x| x.nil? }
+    idx = @board[col].find_index(&:nil?)
     @board[col][idx] = token
     nil
   end
