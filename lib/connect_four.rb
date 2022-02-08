@@ -34,10 +34,14 @@ class Game
       break if @gameboard.game_end?(@player_one.token, @player_two.token)
       
     end
-    win_message(@player_one, @turn)
+    win_message(@gamestate, @turn)
   end
 
-  def win_message(winner, turns)end
+  def win_message(state, turns)
+    puts "It's a Tie!" if state == 'tie'
+    puts "Congrats #{state}! You won with a perfect game!" if turns == 5 || turns == 6
+    puts "Congrats #{state}! You won!" unless state == 'tie' || turns == 5 || turns == 6
+  end
 end
 
 class Player

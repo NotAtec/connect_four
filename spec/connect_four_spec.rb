@@ -91,25 +91,41 @@ describe Game do
       end
 
       it 'gives #win_message the correct details' do
-        expect(game_played).to receive(:win_message).with(player_one, 3)
+        expect(game_played).to receive(:win_message).with("not_started", 3)
         game_played.play_game
       end
     end
   end
 
   describe '#win_message' do
+    let(:player_one) { instance_double(Player, name: 'one', token: 'x') }
+    let(:player_two) { instance_double(Player, name: 'two', token: 'y') }
+    subject(:game_played) { described_class.new(player_one, player_two, board) }
+    let(:board) { instance_double(Board) }
+
     context 'when message is triggered with perfect play' do
       it 'shows correct message' do
+        message = "Congrats one! You won with a perfect game!\n"
+        expect { game_played.win_message(player_one.name, 5) }.to output(message).to_stdout
+      end
+
+      it 'shows correct message' do
+        message = "Congrats two! You won with a perfect game!\n"
+        expect { game_played.win_message(player_two.name, 6) }.to output(message).to_stdout
       end
     end
 
     context 'when message is triggered with win' do
       it 'shows correct message' do
+        message = "Congrats one! You won!\n"
+        expect { game_played.win_message(player_one.name, 7) }.to output(message).to_stdout
       end
     end
 
     context 'when message is triggered without win' do
       it 'shows correct message' do
+        message = "It's a Tie!\n"
+        expect { game_played.win_message('tie', 7) }.to output(message).to_stdout
       end
     end
   end
