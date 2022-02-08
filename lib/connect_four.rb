@@ -31,13 +31,13 @@ class Game
 
   def play_game()
     loop do
-      break if @gameboard.game_won?(@player_one.token, @player_two.token)
+      break if @gameboard.game_end?(@player_one.token, @player_two.token)
       
     end
     win_message(@player_one, @turn)
   end
 
-  def win_message(winner, turns); end
+  def win_message(winner, turns)end
 end
 
 class Player
@@ -54,7 +54,7 @@ class Board
     @board = Array.new(7, Array.new(6))
   end
 
-  def game_won?(token_one, token_two)
+  def game_end?(token_one, token_two)
   end
 end
 # game = Game.new

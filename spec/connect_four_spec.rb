@@ -76,12 +76,12 @@ describe Game do
 
     context 'when win check returns true' do
       before do
-        allow(board).to receive(:game_won?).and_return(true)
+        allow(board).to receive(:game_end?).and_return(true)
         game_played.instance_variable_set(:@turn, 3)
       end
 
       it 'breaks the loop' do
-        expect(board).to receive(:game_won?).once
+        expect(board).to receive(:game_end?).once
         game_played.play_game
       end
 
@@ -92,7 +92,24 @@ describe Game do
 
       it 'gives #win_message the correct details' do
         expect(game_played).to receive(:win_message).with(player_one, 3)
-        game_played.play_game 
+        game_played.play_game
+      end
+    end
+  end
+
+  describe '#win_message' do
+    context 'when message is triggered with perfect play' do
+      it 'shows correct message' do
+      end
+    end
+
+    context 'when message is triggered with win' do
+      it 'shows correct message' do
+      end
+    end
+
+    context 'when message is triggered without win' do
+      it 'shows correct message' do
       end
     end
   end
