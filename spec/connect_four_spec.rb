@@ -132,5 +132,58 @@ describe Game do
 end
 
 describe Board do
-end
+  describe '#place_token' do
+    subject(:board) { described_class.new }
+    context 'column is empty' do
+      before do
+        board.instance_variable_set(:@board, Array.new(7) { Array.new(6) })
+      end
 
+      it 'places token on bottom row' do
+        board.place_token('x', 0)
+        cell = board.instance_variable_get(:@board)[0][0]
+        expect(cell).to eq('x')
+      end
+    end
+
+    context 'when other column is not empty, but required one is' do
+      before do
+        not_empty = Array.new(7) { Array.new(6) }
+        not_empty[0][0] = 'y'
+        board.instance_variable_set(:@board, not_empty)
+      end
+
+      it 'places token in correct column' do
+        board.place_token('x', 1)
+        cell = board.instance_variable_get(:@board)[1][0]
+        expect(cell).to eq('x')
+      end
+    end
+
+    context 'when column is not empty' do
+      before do
+        not_empty = Array.new(7) { Array.new(6) }
+        not_empty[0][0] = 'y'
+        board.instance_variable_set(:@board, not_empty)
+      end
+
+      it 'places token in correct column, on correct row' do
+        board.place_token('x', 0)
+        cell = board.instance_variable_get(:@board)[0][1]
+        expect(cell).to eq('x')
+      end
+    end
+
+    context 'when column is full' do
+      before do
+        not_empty = Array.new(6) { Array.new(6) }
+        not_empty.unshift(Array.new(6, 'y'))
+        board.instance_variable_set(:@board, not_empty)
+      end
+
+      it 'returns an error' do
+        expect(board.place_token('x', 0)).to eq('col_full')
+      end
+    end
+  end
+end

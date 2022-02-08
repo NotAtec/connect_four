@@ -38,9 +38,13 @@ class Game
   end
 
   def win_message(state, turns)
-    puts "It's a Tie!" if state == 'tie'
-    puts "Congrats #{state}! You won with a perfect game!" if turns == 7 || turns == 8
-    puts "Congrats #{state}! You won!" unless state == 'tie' || turns == 7 || turns == 8
+    if state == 'tie'
+      puts "It's a Tie!"
+    elsif turns == 7 || turns == 8
+      puts "Congrats #{state}! You won with a perfect game!"
+    else
+      puts "Congrats #{state}! You won!"
+    end
   end
 end
 
@@ -55,10 +59,18 @@ end
 
 class Board
   def initialize
-    @board = Array.new(7, Array.new(6))
+    @board = Array.new(7) { Array.new(6) }
   end
 
   def game_end?(token_one, token_two)
+  end
+
+  def place_token(token, col)
+    return 'col_full' unless @board[col][5].nil?
+
+    idx = @board[col].find_index { |x| x.nil? }
+    @board[col][idx] = token
+    nil
   end
 end
 # game = Game.new
