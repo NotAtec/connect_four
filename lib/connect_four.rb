@@ -39,8 +39,8 @@ class Game
 
   def win_message(state, turns)
     puts "It's a Tie!" if state == 'tie'
-    puts "Congrats #{state}! You won with a perfect game!" if turns == 5 || turns == 6
-    puts "Congrats #{state}! You won!" unless state == 'tie' || turns == 5 || turns == 6
+    puts "Congrats #{state}! You won with a perfect game!" if turns == 7 || turns == 8
+    puts "Congrats #{state}! You won!" unless state == 'tie' || turns == 7 || turns == 8
   end
 end
 
