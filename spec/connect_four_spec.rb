@@ -125,6 +125,7 @@ describe Game do
         allow(board).to receive(:place_token)
         allow(game_played).to receive(:col_input)
         allow(game_played).to receive(:win_message)
+        allow(board).to receive(:show_board)
       end
 
       it 'triggers player input' do
