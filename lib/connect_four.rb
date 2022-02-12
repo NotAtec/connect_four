@@ -41,7 +41,7 @@ class Game
   def win_message(state, turns)
     if state == 'tie'
       puts "It's a Tie!"
-    elsif turns == 7 || turns == 8
+    elsif turns == 7 || turns == 6
       puts "Congrats #{state}! You won with a perfect game!"
     else
       puts "Congrats #{state}! You won!"
