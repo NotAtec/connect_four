@@ -88,6 +88,7 @@ end
 class Board
   def initialize
     @board = Array.new(7) { Array.new(6) }
+    @rows = Array.new(6) { Array.new(7) }
   end
 
   def game_end?(token_one, token_two); end
@@ -97,14 +98,46 @@ class Board
 
     idx = @board[col].find_index(&:nil?)
     @board[col][idx] = token
+    @rows[idx][col] = token
     nil
   end
 
   def show_board
-    puts '0 | 1 | 2 | 3 | 4 | 5 | 6'
-    puts '-------------------------'
-    # Loop to show the board
-    puts '-------------------------'
+    puts '| 0 | 1 | 2 | 3 | 4 | 5 | 6 |'
+    puts '----------------------------'
+    rows = setup_display
+    strings = setup_strings(rows)
+    strings.each { |s| puts s }
+    puts '----------------------------'
+  end
+
+  private
+
+  def setup_display
+    rows = [[], [], [], [], [], []]
+    @board.reverse_each do |col|
+      col.reverse_each.with_index do |val, idx|
+        rows[idx] << val
+      end
+    end
+    rows
+  end
+
+  def setup_strings(rows)
+    strings = []
+    rows.each do |row|
+      string = '|'
+      row.each do |cell|
+        if cell.nil?
+          string << '   '
+        else
+          string << " #{cell} "
+        end
+        string << '|'
+      end
+      strings << string
+    end
+    strings
   end
 end
 # game = Game.new
