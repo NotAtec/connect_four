@@ -4,7 +4,7 @@ require 'pry-byebug'
 
 # Class containing all savable logic & methods for playing
 class Game
-  def initialize(one = create_player, two = create_player, board = Board.new)
+  def initialize(one = Game.create_player, two = Game.create_player, board = Board.new)
     @player_one = one
     @player_two = two
     @turn = 0
@@ -16,7 +16,7 @@ class Game
     puts 'Welcome! What is your name?'
     name = gets.chomp
     puts "Welcome #{name}, what will be your token?"
-    token = token_check(gets.chomp)
+    token = token_check(gets.chomp) while token.nil?
     Player.new(name, token)
   end
 
@@ -36,7 +36,7 @@ class Game
       break if @gameboard.game_end?(@player_one.token, @player_two.token)
 
       player = @turn.even? ? @player_one : @player_two
-      input = player_input(player.name)
+      input = col_input(player.name)
       @gameboard.place_token(player.token, input)
       # if place_token returns 'col_full' -> Get input again
       @turn += 1
@@ -45,7 +45,23 @@ class Game
     win_message(@gamestate, @turn)
   end
 
-  def player_input(name); end
+  def col_input(name)
+    puts "#{name.upcase}, in which column will you place your next token?"
+    input = col_check(gets.chomp) while input.nil?
+    input
+  end
+
+  def col_check(input)
+    return input if input.match(/[0-6]{1}/) && input.length == 1
+
+    if input.length > 1
+      puts 'Please input only 1 character'
+    else
+      puts 'Please input a number between 0 - 6'
+    end
+    nil
+  end
+
   def win_message(state, turns)
     if state == 'tie'
       puts "It's a Tie!"

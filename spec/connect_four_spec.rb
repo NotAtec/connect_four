@@ -64,6 +64,10 @@ describe Game do
     end
 
     context 'when invalid input is given' do
+      before do
+        allow(game_input).to receive(:puts)
+      end
+
       it 'returns nil' do
         input = 'abx0'
         result = game_input.token_check(input)
@@ -71,15 +75,17 @@ describe Game do
       end
 
       it 'gives appropriate error (length)' do
-        error = "Please input only 1 character\n"
+        error = "Please input only 1 character"
         input = 'abx0'
-        expect { game_input.token_check(input) }.to output(error).to_stdout
+        expect(game_input).to receive(:puts).with(error)
+        game_input.token_check(input)
       end
 
       it 'gives appropriate error (letters only)' do
-        error = "Please input a letter (A-Z)\n"
+        error = "Please input a letter (A-Z)"
         input = '0'
-        expect { game_input.token_check(input) }.to output(error).to_stdout
+        expect(game_input).to receive(:puts).with(error)
+        game_input.token_check(input)
       end
     end
   end
@@ -94,6 +100,7 @@ describe Game do
       before do
         allow(board).to receive(:game_end?).and_return(true)
         game_played.instance_variable_set(:@turn, 3)
+        allow(game_played).to receive(:win_message)
       end
 
       it 'breaks the loop' do
@@ -117,6 +124,7 @@ describe Game do
         allow(board).to receive(:game_end?).and_return(false, true)
         allow(board).to receive(:place_token)
         allow(game_played).to receive(:col_input)
+        allow(game_played).to receive(:win_message)
       end
 
       it 'triggers player input' do
@@ -147,10 +155,44 @@ describe Game do
     end
   end
 
-  describe '#input_check' do
-    subject(:game_col_input) { described_class.new }
+  describe '#col_check' do
+    let(:player_one) { instance_double(Player, name: 'one', token: 'x') }
+    let(:player_two) { instance_double(Player, name: 'two', token: 'y') }
+    subject(:game_col_input) { described_class.new(player_one, player_two) }
 
-    context 'valid input is given' do; end
+    context 'when valid input is given' do
+      it 'returns the input' do
+        input = '4'
+        result = game_col_input.col_check(input)
+        expect(result).to eq('4')
+      end
+    end
+
+    context 'when invalid input is given' do
+      before do
+        allow(game_col_input).to receive(:puts)
+      end
+
+      it 'returns nil' do
+        input = 'a'
+        result = game_col_input.col_check(input)
+        expect(result).to be_nil
+      end
+
+      it 'outputs correct error (length)' do
+        error = "Please input only 1 character"
+        input = '00'
+        expect(game_col_input).to receive(:puts).with(error)
+        game_col_input.col_check(input)
+      end
+
+      it 'outputs correct error (NAN / outside range)' do
+        error = "Please input a number between 0 - 6"
+        input = '7'
+        expect(game_col_input).to receive(:puts).with(error)
+        game_col_input.col_check(input)
+      end
+    end
   end
   describe '#win_message' do
     let(:player_one) { instance_double(Player, name: 'one', token: 'x') }
