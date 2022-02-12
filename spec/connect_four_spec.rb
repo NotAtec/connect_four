@@ -283,4 +283,104 @@ describe Board do
       end
     end
   end
+
+  describe '#game_end?' do
+    subject(:board) { described_class.new }
+
+    context 'win in column at 0' do
+      before do
+        b = board.instance_variable_get(:@board)
+        4.times do |i|
+          b[0][i - 1] = 'x'
+        end
+        board.instance_variable_set(:@board, b)
+      end
+
+      it 'returns true' do
+        result = board.game_end?('x', 'y')
+        expect(result).to be_true
+      end
+    end
+
+    context 'win in column, non 0' do
+      before do
+        b = board.instance_variable_get(:@board)
+        4.times do |i|
+          b[0][i] = 'x'
+        end
+        board.instance_variable_set(:@board, b)
+      end
+
+      it 'returns true' do
+        result = board.game_end?('x', 'y')
+        expect(result).to be_true
+      end
+    end
+    
+    context 'win in row at 0' do
+      before do
+        b = board.instance_variable_get(:@rows)
+        4.times do |i|
+          b[0][i - 1] = 'x'
+        end
+        board.instance_variable_set(:@rows, b)
+      end
+
+      it 'returns true' do
+        result = board.game_end?('x', 'y')
+        expect(result).to be_true
+      end
+    end
+
+    context 'win in row, non 0' do
+      before do
+        b = board.instance_variable_get(:@rows)
+        4.times do |i|
+          b[0][i] = 'x'
+        end
+        board.instance_variable_set(:@rows, b)
+      end
+
+      it 'returns true' do
+        result = board.game_end?('x', 'y')
+        expect(result).to be_true
+      end
+    end
+
+    context 'win in cross, top = left' do
+      before do
+        b = board.instance_variable_get(:@board)
+        4.times do |i|
+          b[5 - i][5 - i] = 'x'
+        end
+      end
+
+      it 'returns true' do
+        result = board.game_end?('x', 'y')
+        expect(result).to be_true
+      end
+    end
+
+    context 'win in cross, top = right' do
+      before do
+        b = board.instance_variable_get(:@board)
+        4.times do |i|
+          b[i - 1][i - 1] = 'x'
+        end
+        board.instance_variable_set(:@board, b)
+      end
+
+      it 'returns true' do
+        result = board.game_end?('x', 'y')
+        expect(result).to be_true
+      end
+    end
+
+    context 'no win' do
+      it 'returns false' do
+        result = board.game_end?('x', 'y')
+        expect(result).to be_false
+      end
+    end
+  end
 end
