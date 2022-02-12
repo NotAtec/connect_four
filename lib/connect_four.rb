@@ -40,6 +40,7 @@ class Game
       @gameboard.place_token(player.token, input)
       # if place_token returns 'col_full' -> Get input again
       @turn += 1
+      @gameboard.show_board
     end
 
     win_message(@gamestate, @turn)
@@ -97,6 +98,13 @@ class Board
     idx = @board[col].find_index(&:nil?)
     @board[col][idx] = token
     nil
+  end
+
+  def show_board
+    puts '0 | 1 | 2 | 3 | 4 | 5 | 6'
+    puts '-------------------------'
+    # Loop to show the board
+    puts '-------------------------'
   end
 end
 # game = Game.new
