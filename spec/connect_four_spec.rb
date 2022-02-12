@@ -26,6 +26,22 @@ describe Game do
         expect(token).to eq('Y')
       end
     end
+
+    context 'when input is correct 2nd try' do
+      before do
+        allow(empty_game).to receive(:token_check).and_return(nil, 'Y')
+        allow(empty_game).to receive(:puts)
+        allow(empty_game).to receive(:gets).and_return('name', 'ab', 'Y')
+      end
+
+      it 'creates player with correct info' do 
+        object = empty_game.create_player
+        name = object.instance_variable_get(:@name)
+        token = object.instance_variable_get(:@token)
+        expect(name).to eq('name')
+        expect(token).to eq('Y')
+      end
+    end
   end
 
   describe '.token_check' do
@@ -100,21 +116,22 @@ describe Game do
       before do
         allow(board).to receive(:game_end?).and_return(false, true)
         allow(board).to receive(:place_token)
+        allow(game_played).to receive(:col_input)
       end
 
       it 'triggers player input' do
-        expect(game_played).to receive(:player_input).once
+        expect(game_played).to receive(:col_input).once
         game_played.play_game
       end
 
       it 'gives player input correct details' do
-        expect(game_played).to receive(:player_input).with('one').once
+        expect(game_played).to receive(:col_input).with('one').once
         game_played.play_game
       end
 
       it 'gives player input correct details (p2)' do
         game_played.instance_variable_set(:@turn, 1)
-        expect(game_played).to receive(:player_input).with('two').once
+        expect(game_played).to receive(:col_input).with('two').once
         game_played.play_game
       end
 
@@ -130,7 +147,10 @@ describe Game do
     end
   end
 
-  describe '#player_input' do
+  describe '#input_check' do
+    subject(:game_col_input) { described_class.new }
+
+    context 'valid input is given' do; end
   end
   describe '#win_message' do
     let(:player_one) { instance_double(Player, name: 'one', token: 'x') }
