@@ -34,14 +34,22 @@ class Game
   def play_game
     loop do
       break if @gameboard.game_end?(@player_one.token, @player_two.token)
+
+      player = @turn.even? ? @player_one : @player_two
+      input = player_input(player.name)
+      @gameboard.place_token(player.token, input)
+      # if place_token returns 'col_full' -> Get input again
+      @turn += 1
     end
+
     win_message(@gamestate, @turn)
   end
 
+  def player_input(name); end
   def win_message(state, turns)
     if state == 'tie'
       puts "It's a Tie!"
-    elsif turns == 7 || turns == 6
+    elsif turns == 7 || turns == 8
       puts "Congrats #{state}! You won with a perfect game!"
     else
       puts "Congrats #{state}! You won!"

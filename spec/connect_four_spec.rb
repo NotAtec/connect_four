@@ -95,8 +95,43 @@ describe Game do
         game_played.play_game
       end
     end
+
+    context 'when win check returns false then true' do
+      before do
+        allow(board).to receive(:game_end?).and_return(false, true)
+        allow(board).to receive(:place_token)
+      end
+
+      it 'triggers player input' do
+        expect(game_played).to receive(:player_input).once
+        game_played.play_game
+      end
+
+      it 'gives player input correct details' do
+        expect(game_played).to receive(:player_input).with('one').once
+        game_played.play_game
+      end
+
+      it 'gives player input correct details (p2)' do
+        game_played.instance_variable_set(:@turn, 1)
+        expect(game_played).to receive(:player_input).with('two').once
+        game_played.play_game
+      end
+
+      it 'breaks the loop after' do
+        expect(board).to receive(:game_end?).twice
+        game_played.play_game
+      end
+
+      it 'gives #win_message the correct details' do
+        expect(game_played).to receive(:win_message).with('not_started', 1)
+        game_played.play_game
+      end
+    end
   end
 
+  describe '#player_input' do
+  end
   describe '#win_message' do
     let(:player_one) { instance_double(Player, name: 'one', token: 'x') }
     let(:player_two) { instance_double(Player, name: 'two', token: 'y') }
@@ -106,12 +141,12 @@ describe Game do
     context 'when message is triggered with perfect play' do
       it 'shows correct message' do
         message = "Congrats one! You won with a perfect game!\n"
-        expect { game_played.win_message(player_one.name, 6) }.to output(message).to_stdout
+        expect { game_played.win_message(player_one.name, 7) }.to output(message).to_stdout
       end
 
       it 'shows correct message' do
         message = "Congrats two! You won with a perfect game!\n"
-        expect { game_played.win_message(player_two.name, 7) }.to output(message).to_stdout
+        expect { game_played.win_message(player_two.name, 8) }.to output(message).to_stdout
       end
     end
 
