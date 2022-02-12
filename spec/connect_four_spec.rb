@@ -106,19 +106,19 @@ describe Game do
     context 'when message is triggered with perfect play' do
       it 'shows correct message' do
         message = "Congrats one! You won with a perfect game!\n"
-        expect { game_played.win_message(player_one.name, 7) }.to output(message).to_stdout
+        expect { game_played.win_message(player_one.name, 6) }.to output(message).to_stdout
       end
 
       it 'shows correct message' do
         message = "Congrats two! You won with a perfect game!\n"
-        expect { game_played.win_message(player_two.name, 8) }.to output(message).to_stdout
+        expect { game_played.win_message(player_two.name, 7) }.to output(message).to_stdout
       end
     end
 
     context 'when message is triggered with win' do
       it 'shows correct message' do
         message = "Congrats one! You won!\n"
-        expect { game_played.win_message(player_one.name, 9) }.to output(message).to_stdout
+        expect { game_played.win_message(player_one.name, 10) }.to output(message).to_stdout
       end
     end
 
