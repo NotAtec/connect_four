@@ -1,4 +1,3 @@
-
 # Class containing all savable logic & methods for playing
 class Game
   attr_writer :gamestate
