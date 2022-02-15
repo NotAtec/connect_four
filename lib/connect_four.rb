@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 require 'pry-byebug'
 
 # Class containing all savable logic & methods for playing
@@ -35,6 +33,7 @@ class Game
 
   def play_game
     loop do
+      @gameboard.show_board
       val = @gameboard.game_end(@player_one.token, @player_two.token)
       if val
         winner = @turn.even? ? @player_one : @player_two
@@ -44,10 +43,9 @@ class Game
 
       player = @turn.even? ? @player_one : @player_two
       input = col_input(player.name)
-      @gameboard.place_token(player.token, input)
+      @gameboard.place_token(player.token, input.to_i)
       # if place_token returns 'col_full' -> Get input again
       @turn += 1
-      @gameboard.show_board
     end
 
     win_message(@gamestate, @turn)
@@ -74,9 +72,9 @@ class Game
     if state == 'tie'
       puts "It's a Tie!"
     elsif turns == 7 || turns == 8
-      puts "Congrats #{state}! You won with a perfect game!"
+      puts "Congrats #{state.name}! You won with a perfect game!"
     else
-      puts "Congrats #{state}! You won!"
+      puts "Congrats #{state.name}! You won!"
     end
   end
 end
@@ -124,9 +122,8 @@ class Board
   def show_board
     puts '| 0 | 1 | 2 | 3 | 4 | 5 | 6 |'
     puts '----------------------------'
-    rows = setup_display
-    strings = setup_strings(rows)
-    strings.each { |s| puts s }
+    strings = setup_strings(@board.transpose)
+    strings.reverse_each { |s| puts s }
     puts '----------------------------'
   end
 
@@ -135,7 +132,8 @@ class Board
   def four_in_row(one, two, rows)
     rows.each do |row|
       row.each_cons(4) do |set|
-        return set[0] if set.all? { |x| x == one || x == two } && !set[0].nil?
+        return set[0] if set.all? { |x| x == one} && !set[0].nil?
+        return set[0] if set.all? { |x| x == two } && !set[0].nil?
       end
     end
     false
@@ -195,4 +193,6 @@ class Board
     strings
   end
 end
-# game = Game.new
+
+game = Game.new
+game.play_game
