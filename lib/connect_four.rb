@@ -103,11 +103,11 @@ class Board
 
     case winner
     when token_one
-      return 'one'
+      'one'
     when token_two
-      return 'two'
+      'two'
     else
-      return false
+      false
     end
   end
 
@@ -132,7 +132,7 @@ class Board
   def four_in_row(one, two, rows)
     rows.each do |row|
       row.each_cons(4) do |set|
-        return set[0] if set.all? { |x| x == one} && !set[0].nil?
+        return set[0] if set.all? { |x| x == one } && !set[0].nil?
         return set[0] if set.all? { |x| x == two } && !set[0].nil?
       end
     end
@@ -140,10 +140,10 @@ class Board
   end
 
   def diagonals(board)
-    (0..board.size-4).map do |i|
-      (0..board.size-1-i).map { |j| board[i+j][j] }
-    end.concat((1..board.first.size-4).map do |j|
-      (0..board.size-j-1).map { |i| board[i][j+i] }
+    (0..board.size - 4).map do |i|
+      (0..board.size - 1 - i).map { |j| board[i + j][j] }
+    end.concat((1..board.first.size - 4).map do |j|
+      (0..board.size - j - 1).map { |i| board[i][j + i] }
     end)
   end
 
@@ -165,7 +165,7 @@ class Board
     end
     rows
   end
-  
+
   def setup_display
     rows = [[], [], [], [], [], []]
     @board.reverse_each do |col|
@@ -181,11 +181,7 @@ class Board
     rows.each do |row|
       string = '|'
       row.each do |cell|
-        if cell.nil?
-          string << '   '
-        else
-          string << " #{cell} "
-        end
+        string << cell.nil? ? '   ' : " #{cell} "
         string << '|'
       end
       strings << string

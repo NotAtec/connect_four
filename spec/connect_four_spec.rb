@@ -34,7 +34,7 @@ describe Game do
         allow(empty_game).to receive(:gets).and_return('name', 'ab', 'Y')
       end
 
-      it 'creates player with correct info' do 
+      it 'creates player with correct info' do
         object = empty_game.create_player
         name = object.instance_variable_get(:@name)
         token = object.instance_variable_get(:@token)
@@ -75,14 +75,14 @@ describe Game do
       end
 
       it 'gives appropriate error (length)' do
-        error = "Please input only 1 character"
+        error = 'Please input only 1 character'
         input = 'abx0'
         expect(game_input).to receive(:puts).with(error)
         game_input.token_check(input)
       end
 
       it 'gives appropriate error (letters only)' do
-        error = "Please input a letter (A-Z)"
+        error = 'Please input a letter (A-Z)'
         input = '0'
         expect(game_input).to receive(:puts).with(error)
         game_input.token_check(input)
@@ -181,20 +181,21 @@ describe Game do
       end
 
       it 'outputs correct error (length)' do
-        error = "Please input only 1 character"
+        error = 'Please input only 1 character'
         input = '00'
         expect(game_col_input).to receive(:puts).with(error)
         game_col_input.col_check(input)
       end
 
       it 'outputs correct error (NAN / outside range)' do
-        error = "Please input a number between 0 - 6"
+        error = 'Please input a number between 0 - 6'
         input = '7'
         expect(game_col_input).to receive(:puts).with(error)
         game_col_input.col_check(input)
       end
     end
   end
+
   describe '#win_message' do
     let(:player_one) { instance_double(Player, name: 'one', token: 'x') }
     let(:player_two) { instance_double(Player, name: 'two', token: 'y') }
@@ -232,7 +233,7 @@ describe Game do
       before do
         allow(board).to receive(:show_board)
       end
-      
+
       it 'shows correct message' do
         message = "It's a Tie!\n"
         expect { game_played.win_message('tie', 7) }.to output(message).to_stdout
@@ -329,7 +330,7 @@ describe Board do
         expect(result).to eq('two')
       end
     end
-    
+
     context 'win in row at 0' do
       before do
         b = board.instance_variable_get(:@board)
