@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
-require_relative '../lib/connect_four'
+require_relative '../lib/board'
+require_relative '../lib/game'
+require_relative '../lib/player'
 
 describe Game do
   describe '.create_player' do
@@ -114,7 +116,7 @@ describe Game do
       end
 
       it 'gives #win_message the correct details' do
-        expect(game_played).to receive(:win_message).with(player_two, 3)
+        expect(game_played).to receive(:win_message).with(player_one, 3)
         game_played.play_game
       end
     end
@@ -150,7 +152,7 @@ describe Game do
       end
 
       it 'gives #win_message the correct details' do
-        expect(game_played).to receive(:win_message).with(player_two, 1)
+        expect(game_played).to receive(:win_message).with(player_one, 1)
         game_played.play_game
       end
     end
