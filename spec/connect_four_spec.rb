@@ -396,5 +396,18 @@ describe Board do
         expect(result).to be false
       end
     end
+
+    context 'board is filled' do
+      before do
+        b = board.instance_variable_get(:@board)
+        b.each { |row| row.map! { 'a' } }
+        board.instance_variable_set(:@board, b)
+      end
+
+      it 'returns tie' do
+        result = board.game_end('b', 'y')
+        expect(result).to eq('tie')
+      end
+    end
   end
 end
