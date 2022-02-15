@@ -202,25 +202,37 @@ describe Game do
     let(:board) { instance_double(Board) }
 
     context 'when message is triggered with perfect play' do
+      before do
+        allow(board).to receive(:show_board)
+      end
+
       it 'shows correct message' do
         message = "Congrats one! You won with a perfect game!\n"
-        expect { game_played.win_message(player_one.name, 7) }.to output(message).to_stdout
+        expect { game_played.win_message(player_one, 7) }.to output(message).to_stdout
       end
 
       it 'shows correct message' do
         message = "Congrats two! You won with a perfect game!\n"
-        expect { game_played.win_message(player_two.name, 8) }.to output(message).to_stdout
+        expect { game_played.win_message(player_two, 8) }.to output(message).to_stdout
       end
     end
 
     context 'when message is triggered with win' do
+      before do
+        allow(board).to receive(:show_board)
+      end
+
       it 'shows correct message' do
         message = "Congrats one! You won!\n"
-        expect { game_played.win_message(player_one.name, 10) }.to output(message).to_stdout
+        expect { game_played.win_message(player_one, 10) }.to output(message).to_stdout
       end
     end
 
     context 'when message is triggered without win' do
+      before do
+        allow(board).to receive(:show_board)
+      end
+      
       it 'shows correct message' do
         message = "It's a Tie!\n"
         expect { game_played.win_message('tie', 7) }.to output(message).to_stdout

@@ -33,7 +33,6 @@ class Game
 
   def play_game
     loop do
-      @gameboard.show_board
       val = @gameboard.game_end(@player_one.token, @player_two.token)
       if val
         winner = @turn.even? ? @player_one : @player_two
@@ -69,6 +68,7 @@ class Game
   end
 
   def win_message(state, turns)
+    @gameboard.show_board
     if state == 'tie'
       puts "It's a Tie!"
     elsif turns == 7 || turns == 8
@@ -194,5 +194,5 @@ class Board
   end
 end
 
-game = Game.new
-game.play_game
+# game = Game.new
+# game.play_game
