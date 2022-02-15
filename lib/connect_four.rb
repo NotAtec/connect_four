@@ -96,16 +96,19 @@ class Board
   end
 
   def game_end(token_one, token_two)
-    winner = four_in_row(token_one, token_two, @board) ||
+    state = four_in_row(token_one, token_two, @board) ||
              four_in_row(token_one, token_two, @board.transpose)  ||
              four_in_row(token_one, token_two, diagonals(@board)) ||
-             four_in_row(token_one, token_two, antediagonals(@board))
+             four_in_row(token_one, token_two, antediagonals(@board)) ||
+             game_tied(@board)
 
-    case winner
+    case state
     when token_one
       'one'
     when token_two
       'two'
+    when 'tie'
+      'tie'
     else
       false
     end
@@ -128,6 +131,14 @@ class Board
   end
 
   private
+
+  def game_tied(board)
+    tied = 'tie'
+    board.each do |row|
+      tied = false unless row.all? { |x| !x.nil? }
+    end
+    tied
+  end
 
   def four_in_row(one, two, rows)
     rows.each do |row|
