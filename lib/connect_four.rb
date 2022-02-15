@@ -35,11 +35,12 @@ class Game
     loop do
       val = @gameboard.game_end(@player_one.token, @player_two.token)
       if val
-        winner = @turn.even? ? @player_one : @player_two
+        winner = @turn.even? ?  @player_two : @player_one
         @gamestate = winner
         break
       end
-
+      
+      @gameboard.show_board
       player = @turn.even? ? @player_one : @player_two
       input = col_input(player.name)
       @gameboard.place_token(player.token, input.to_i)
@@ -192,7 +193,12 @@ class Board
     rows.each do |row|
       string = '|'
       row.each do |cell|
-        string << cell.nil? ? '   ' : " #{cell} "
+        if cell.nil?
+          string << '   '
+        else
+          string <<  " #{cell} "
+        end
+
         string << '|'
       end
       strings << string
@@ -201,5 +207,5 @@ class Board
   end
 end
 
-# game = Game.new
-# game.play_game
+game = Game.new
+game.play_game
