@@ -4,6 +4,8 @@ require 'pry-byebug'
 
 # Class containing all savable logic & methods for playing
 class Game
+  attr_writer :gamestate
+
   def initialize(one = Game.create_player, two = Game.create_player, board = Board.new)
     @player_one = one
     @player_two = two
@@ -33,7 +35,11 @@ class Game
 
   def play_game
     loop do
-      break if @gameboard.game_end?(@player_one.token, @player_two.token)
+      val = @gameboard.game_end?(@player_one.token, @player_two.token, self)
+      if val
+        # @gamestate = val
+        break
+      end
 
       player = @turn.even? ? @player_one : @player_two
       input = col_input(player.name)
@@ -88,17 +94,29 @@ end
 class Board
   def initialize
     @board = Array.new(7) { Array.new(6) }
-    @rows = Array.new(6) { Array.new(7) }
   end
 
-  def game_end?(token_one, token_two); end
+  def game_end?(token_one, token_two, game)
+    winner = four_in_row(token_one, token_two, @board) ||
+             four_in_row(token_one, token_two, @board.transpose)  ||
+             four_in_row(token_one, token_two, diagonals(@board)) ||
+             four_in_row(token_one, token_two, antediagonals(@board))
+
+    case winner
+    when token_one
+      'one'
+    when token_two
+      'two'
+    else
+      false
+    end
+  end
 
   def place_token(token, col)
     return 'col_full' unless @board[col][5].nil?
 
     idx = @board[col].find_index(&:nil?)
     @board[col][idx] = token
-    @rows[idx][col] = token
     nil
   end
 
@@ -113,6 +131,42 @@ class Board
 
   private
 
+  def four_in_row(one, two, rows)
+    rows.each do |row|
+      row.each_cons(4) do |set|
+        return set[0] if set.all? { |x| x == one || x == two } && !set[0].nil?
+      end
+    end
+    false
+  end
+
+  def diagonals(board)
+    (0..board.size-4).map do |i|
+      (0..board.size-1-i).map { |j| board[i+j][j] }
+    end.concat((1..board.first.size-4).map do |j|
+      (0..board.size-j-1).map { |i| board[i][j+i] }
+    end)
+  end
+
+  def antediagonals(board)
+    diags = [[[0, 2], [1, 3], [2, 4], [3, 5]],
+             [[0, 1], [1, 2], [2, 3], [3, 4], [4, 5]],
+             [[0, 0], [1, 1], [2, 2], [3, 3], [4, 4], [5, 5]],
+             [[1, 0], [2, 1], [3, 2], [4, 3], [5, 4], [6, 5]],
+             [[2, 0], [3, 1], [4, 2], [5, 3], [6, 4]],
+             [[3, 0], [4, 1], [5, 2], [6, 3]]]
+    rows = []
+
+    diags.each do |diag|
+      row = []
+      diag.each do |location|
+        row << board[location[0]][location[1]]
+      end
+      rows << row
+    end
+    rows
+  end
+  
   def setup_display
     rows = [[], [], [], [], [], []]
     @board.reverse_each do |col|

@@ -292,14 +292,14 @@ describe Board do
       before do
         b = board.instance_variable_get(:@board)
         4.times do |i|
-          b[0][i - 1] = 'x'
+          b[0][i] = 'x'
         end
         board.instance_variable_set(:@board, b)
       end
 
       it 'returns true' do
         result = board.game_end?('x', 'y')
-        expect(result).to be_true
+        expect(result).to eq('one')
       end
     end
 
@@ -307,44 +307,44 @@ describe Board do
       before do
         b = board.instance_variable_get(:@board)
         4.times do |i|
-          b[0][i] = 'x'
+          b[0][i + 1] = 'y'
         end
         board.instance_variable_set(:@board, b)
       end
 
       it 'returns true' do
         result = board.game_end?('x', 'y')
-        expect(result).to be_true
+        expect(result).to eq('two')
       end
     end
     
     context 'win in row at 0' do
       before do
-        b = board.instance_variable_get(:@rows)
+        b = board.instance_variable_get(:@board)
         4.times do |i|
-          b[0][i - 1] = 'x'
+          b[i][0] = 'x'
         end
-        board.instance_variable_set(:@rows, b)
+        board.instance_variable_set(:@board, b)
       end
 
       it 'returns true' do
         result = board.game_end?('x', 'y')
-        expect(result).to be_true
+        expect(result).to eq('one')
       end
     end
 
     context 'win in row, non 0' do
       before do
-        b = board.instance_variable_get(:@rows)
+        b = board.instance_variable_get(:@board)
         4.times do |i|
-          b[0][i] = 'x'
+          b[i + 1][0] = 'x'
         end
-        board.instance_variable_set(:@rows, b)
+        board.instance_variable_set(:@board, b)
       end
 
       it 'returns true' do
         result = board.game_end?('x', 'y')
-        expect(result).to be_true
+        expect(result).to eq('one')
       end
     end
 
@@ -358,7 +358,7 @@ describe Board do
 
       it 'returns true' do
         result = board.game_end?('x', 'y')
-        expect(result).to be_true
+        expect(result).to eq('one')
       end
     end
 
@@ -366,21 +366,21 @@ describe Board do
       before do
         b = board.instance_variable_get(:@board)
         4.times do |i|
-          b[i - 1][i - 1] = 'x'
+          b[i][i] = 'y'
         end
         board.instance_variable_set(:@board, b)
       end
 
       it 'returns true' do
         result = board.game_end?('x', 'y')
-        expect(result).to be_true
+        expect(result).to eq('two')
       end
     end
 
     context 'no win' do
       it 'returns false' do
         result = board.game_end?('x', 'y')
-        expect(result).to be_false
+        expect(result).to be false
       end
     end
   end
