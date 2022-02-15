@@ -98,13 +98,13 @@ describe Game do
 
     context 'when win check returns true' do
       before do
-        allow(board).to receive(:game_end?).and_return(true)
+        allow(board).to receive(:game_end).and_return(true)
         game_played.instance_variable_set(:@turn, 3)
         allow(game_played).to receive(:win_message)
       end
 
       it 'breaks the loop' do
-        expect(board).to receive(:game_end?).once
+        expect(board).to receive(:game_end).once
         game_played.play_game
       end
 
@@ -114,14 +114,14 @@ describe Game do
       end
 
       it 'gives #win_message the correct details' do
-        expect(game_played).to receive(:win_message).with("not_started", 3)
+        expect(game_played).to receive(:win_message).with(player_two, 3)
         game_played.play_game
       end
     end
 
     context 'when win check returns false then true' do
       before do
-        allow(board).to receive(:game_end?).and_return(false, true)
+        allow(board).to receive(:game_end).and_return(false, true)
         allow(board).to receive(:place_token)
         allow(game_played).to receive(:col_input)
         allow(game_played).to receive(:win_message)
@@ -145,12 +145,12 @@ describe Game do
       end
 
       it 'breaks the loop after' do
-        expect(board).to receive(:game_end?).twice
+        expect(board).to receive(:game_end).twice
         game_played.play_game
       end
 
       it 'gives #win_message the correct details' do
-        expect(game_played).to receive(:win_message).with('not_started', 1)
+        expect(game_played).to receive(:win_message).with(player_two, 1)
         game_played.play_game
       end
     end
@@ -285,7 +285,7 @@ describe Board do
     end
   end
 
-  describe '#game_end?' do
+  describe '#game_end' do
     subject(:board) { described_class.new }
 
     context 'win in column at 0' do
@@ -298,7 +298,7 @@ describe Board do
       end
 
       it 'returns true' do
-        result = board.game_end?('x', 'y')
+        result = board.game_end('x', 'y')
         expect(result).to eq('one')
       end
     end
@@ -313,7 +313,7 @@ describe Board do
       end
 
       it 'returns true' do
-        result = board.game_end?('x', 'y')
+        result = board.game_end('x', 'y')
         expect(result).to eq('two')
       end
     end
@@ -328,7 +328,7 @@ describe Board do
       end
 
       it 'returns true' do
-        result = board.game_end?('x', 'y')
+        result = board.game_end('x', 'y')
         expect(result).to eq('one')
       end
     end
@@ -343,7 +343,7 @@ describe Board do
       end
 
       it 'returns true' do
-        result = board.game_end?('x', 'y')
+        result = board.game_end('x', 'y')
         expect(result).to eq('one')
       end
     end
@@ -357,7 +357,7 @@ describe Board do
       end
 
       it 'returns true' do
-        result = board.game_end?('x', 'y')
+        result = board.game_end('x', 'y')
         expect(result).to eq('one')
       end
     end
@@ -372,14 +372,14 @@ describe Board do
       end
 
       it 'returns true' do
-        result = board.game_end?('x', 'y')
+        result = board.game_end('x', 'y')
         expect(result).to eq('two')
       end
     end
 
     context 'no win' do
       it 'returns false' do
-        result = board.game_end?('x', 'y')
+        result = board.game_end('x', 'y')
         expect(result).to be false
       end
     end

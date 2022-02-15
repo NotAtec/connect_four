@@ -35,9 +35,10 @@ class Game
 
   def play_game
     loop do
-      val = @gameboard.game_end?(@player_one.token, @player_two.token, self)
+      val = @gameboard.game_end(@player_one.token, @player_two.token)
       if val
-        # @gamestate = val
+        winner = @turn.even? ? @player_one : @player_two
+        @gamestate = winner
         break
       end
 
@@ -96,7 +97,7 @@ class Board
     @board = Array.new(7) { Array.new(6) }
   end
 
-  def game_end?(token_one, token_two, game)
+  def game_end(token_one, token_two)
     winner = four_in_row(token_one, token_two, @board) ||
              four_in_row(token_one, token_two, @board.transpose)  ||
              four_in_row(token_one, token_two, diagonals(@board)) ||
@@ -104,11 +105,11 @@ class Board
 
     case winner
     when token_one
-      'one'
+      return 'one'
     when token_two
-      'two'
+      return 'two'
     else
-      false
+      return false
     end
   end
 
